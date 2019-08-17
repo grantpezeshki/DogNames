@@ -1,0 +1,14 @@
+select * from AllYearLicenseDogNameCounts where BirthYear=2018 AND animalGender = 'M' AND AnimalName not in('UNKNOWN','NAME NOT PROVIDED','NAME','NOT','NONE','DOG') order by DogCount desc Limit 10
+
+
+WITH a as (select ROW_NUMBER() OVER (PARTITION BY BirthYear ORDER BY DogCount desc) RowNum, * from AllYearLicenseDogNameCounts  order by BirthYear, RowNum )
+SELECT * FROM a WHERE RowNum<10
+
+WITH a as (select ROW_NUMBER() OVER (PARTITION BY BirthYear ORDER BY DogCount desc) RowNum, * 
+           from AllYearLicenseDogNameCounts  
+           where animalGender='F' AND AnimalName not in('UNKNOWN','NAME NOT PROVIDED','NAME','NOT','NONE','DOG','.','NAME?','TBD')
+           order by BirthYear, RowNum )
+SELECT * FROM a WHERE RowNum<=10
+
+
+
